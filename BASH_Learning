@@ -1,0 +1,358 @@
+Lecture 1: Course Overview + The shell
+
+>> date
+
+>> echo hello
+>> echo Hello\ World
+
+>> echo $PATH
+绝对路径查询
+
+>> which echo
+
+相对路径是对于当前位置为主的:
+>> pwd
+
+>> cd /home
+
+dot means the current directory
+dot dot means the parent directory
+
+>> cd .. 
+go back to parent directory
+
+>> cd ./home
+go deep to home directory
+
+>> cd /
+go to root directory
+
+>> cd -
+go back to previous directory
+
+>> ls --help
+帮助如何使用ls
+
+------------- mv command
+>> mv 
+rename the file
+
+>> cp
+copy the file
+
+>> rm
+remove the file
+
+>> rmdir
+remove the directory only if the directory is empty
+
+>> mkdir "My photos"
+make a directory named "My photos"
+
+>> man
+navigate the file
+
+>> Ctrl + l
+clear the terminal / shell
+--------------
+>> echo hello > hello.txt
+>> cat hello.txt
+
+>> cat < hello.txt > hello2.txt
+
+double > : >> means append
+>> cat < hello.txt >> hello2.txt
+
+>> cat hello2.txt
+hello
+hello
+--------------
+>> ls -l | tail -n1
+输出最后一行
+
+>> ls -l | tail -n1 > ls.txt
+>> cat ls.txt
+最后一行保存到记事本并且输出
+-------------- texture methods
+
+>> curl --head --silent baidu.com
+
+>> curl --head --silent baidu.com | grep-i content-length
+
+>> curl --head --silent baidu.com | grep-i content-length | cut --delimiter=' ' -f2
+-------------- root user
+root = supre user
+root could do whatever they want
+
+use sudo command
+>> sudo
+
+>> cd sys/
+new whole wolrd!
+比较内部的电脑程序 一般只允许root user使用的
+
+>> cat brightness
+>> sudo echo 500 > brightness
+permission denied:
+
+>> sudo su
+now you are acting as root user not yourself anymore like mac or lzy
+
+>> exit
+exit the root user mode
+
+>> sudo find
+search the file
+
+>> xdg-open XXXX.txt
+means laptop will find a proper application to open the file(like XXXX.txt)
+
+-------------------------------------------------------------------
+Lecture 2: Shell tools and scripting
+
+>> foo=bar
+>> echo $foo
+bar
+
+>> echo "Valie is $foo"
+Value is bar
+
+>> echo 'Value is $foo'
+Value is $foo
+
+>> vim mcd.sh
+编辑mcd函数：
+mcd (){
+        mkdir -p "$1"
+        cd "$1"
+}
+
+在 Linux 中使用 vim 时，输入 vim xxx.file 输入好文件内容之后，怎么保存呢？
+按 ESC，左下角就可以进行输入
+:w 保存但不退出
+:wq 保存并退出
+:q 退出
+:q! 强制退出，不保存
+:e! 放弃所有修改，从上次保存文件开始再编辑命令历史
+
+>> source mcd.sh
+执行function mcd
+
+>> mcd test
+测试执行
+
+>> cd $_
+previous argument
+
+sometimes
+>> mkdir /mnt
+permission denied
+
+>> sudo mkdir /mnt
+success!
+----------------------------
+>> echo "Hello"
+Hello
+>> echo $?
+0
+这里输出0说明 return 0 就是说everything okay
+就像C语言 zero error code
+
+>> grep foobar mcd.sh
+search the foobar string in mcd.sh
+>> echo $?
+1
+means not in there!
+
+>> true
+>> echo $?
+0
+
+>> false
+>> echo $?
+1
+means return 1, there is ('error') one error code
+
+>> false || echo "Oops fail" 
+|| = OR operator
+
+>> true || echo "Will be not be printed"
+------------ AND operator
+>> true && echo "thing went well"
+Things went well
+
+>> false && echo "thing went well"
+_
+---------- ; operator (总会执行)
+>> false ; echo "This will always print"
+
+---------- string
+>> foo=$(pwd)
+>> echo $foo
+/users/mac/desktop/tools
+
+>> echo "we are in $(pwd)"
+we are in /users/mac/desktop/tools
+-------- process substitution
+>> cat <(ls) <(ls ..)
+-----------------创建shell文件并且执行 exceuting the scripts
+>> vim examples.sh
+#!/bin/bash
+
+echo "Starting program at $(date)" # Date will be substituted
+
+echo "Running program $0 with $# arguments with pid $$"
+
+for file in "$@"; do
+    grep foobar "$file" > /dev/null 2> /dev/null
+    # When pattern is not found, grep has exit status 1
+    # We redirect STDOUT and STDERR to a null register since we do not care about them
+    if [[ $? -ne 0 ]]; then
+        echo "File $file does not have any foobar, adding one"
+        echo "# foobar" >> "$file"
+    fi
+done
+
+>> ./examples.sh mcd.sh
+去检查mcd这个文件里有多少个空格 或者多少个foobar根据example.sh的执行来执行
+
+-----------------
+>> ls *.sh
+找出所有当前位置的所有尾缀是sh的文件(shell文件)
+
+>> mkdir project1
+>> mkdir project2
+>> mkdir project3
+
+>> ls project?
+检索
+
+------------------文件convert
+>> convert image.png image.jpg
+
+------------创建多个文件
+>> touch foo{,2,3,4}
+创建了foo2 foo3 foo4
+
+>> touch {foo,bar}/{a..j}
+创建folder 快捷
+
+>> diff <(ls foo) <(ls bar)
+check foo bar files in or not
+
+------------- calling other languages in shell
+>> cp pytorch.py /Users/mac/desktop/tools
+copy the file into that directory
+
+>> vim pytorch.py
+
+import sys
+for arg in reversed(sys.argv[1:]):
+        print(arg)
+print('ok')
+# foobar
+
+
+>> python pytorch.py a b c
+a
+b
+c
+
+------------ debugging tool - debug the shell file
+>> shellcheck mcd.sh
+
+------------ man
+man == help()
+man will teach how to use that command(manual )
+or descriptions of the tools
+
+>> man mv
+
+----------------find command
+
+>> find . -name src -type d 
+>> find . -path "**/test/*.py" -type f
+
+>> find . -mtime -1
+.
+./examples.sh
+./test
+./foo1
+./project1
+./1
+./mcd.sh
+./pytorch.py
+./project42
+./foo4
+./foo3
+./foo
+./foo2
+./12,3,,4
+./bar
+./bar/i
+./bar/g
+./bar/a
+./bar/f
+./bar/h
+./bar/j
+./bar/c
+./bar/d
+./bar/e
+./bar/b
+./project2
+./4
+./3
+./2
+
+output all the possible files below <-
+
+>> find . -name "*.tmp"
+找出所有当前位置尾缀是.tmp的文件
+
+>> fd ".*py"
+------------- locate command ---- database approach
+>> locate shell
+
+>> updatedb
+
+--------------
+>> grep foobar examples.sh
+
+seach foobar in examples file
+
+>> grep -R foobar examples.sh
+lowercases for -R
+
+>> rg "import sys" -t py ~/scratch
+这会找到所有在~/scracth位置中python文件里带有import sys的文件
+
+
+>> rg -u -files-without-match "^#$^" -t sh
+search -> 找到有字符串"^#$^"的文件
+
+--------------- 寻找以前使用过的command
+>> histroy 
+输出所有以前使用过的command
+
+>> history 123
+输出所有以前使用过的123行command
+
+>> history 1 | grep convert
+输出所有以前使用过的command 并且带有convert的字符串
+
+>> fzf 
+fast finder
+
+--------------- navigate the files
+>> ls -R
+
+>> tree
+print all the stuff and relationships bewteen every files
+
+>> broot
+list every single files
+
+>> nnn
+navigation between folders and files
+
+
