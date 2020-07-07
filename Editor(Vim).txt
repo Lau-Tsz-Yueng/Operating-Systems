@@ -1,0 +1,114 @@
+Lecture 3 Editor Vim
+
+modal editor:
+multiple operating mode
+
+
+normal mode -> i -> insert mode : navigation
+
+insert mode -> <esc> -> normal : texting
+
+normal mode -> r -> replace mode -> selection{ visual}
+
+normal mode -> : command mode
+--------------
+^V <=> Ctrl-V
+--------------
+
+most programmers use caps lock instead of esc key
+--------------------------------------------
+>> vim
+
+just only controlled by keyboard
+-----------
+command mode:
+:q quit vim
+:w save file
+
+:help :q 
+know how to use :q
+
+:sp 双向编辑
+
+:qa
+quit all the windows
+
+-----------
+vim is an interference programming language!
+------------
+hjkl key for vim navigation command
+h left
+j up
+k down
+l right
+
+e key <- end of next word
+
+scroll U up page
+scroll D down page
+-----------
+
+>> f c
+find first character of c
+
+---------- editing commands:
+a <- editing mode
+u <- undo
+d e <- deleting end of the words
+c e <- change to the end of the words
+x <- deleting the characters
+
+
+y <- copy
+w <- paste
+
+b <- select lines
+v <- visual mode
+
+4 k <- move up 4 lines ?
+4 j <- move down 4 lines ?
+mostly movement commands
+
+---------------- modifiers
+cd [] <- change
+
+% <- go to matching paratheses
+-----------------
+def fizz_buzz(limit):
+        for i in range(limit):
+                if i % 3 == 0:
+                        print('fizz')
+                if i % 5 == 0:
+                        print('fizz')
+                if i % 3 and i % 5:
+                        print(i)
+
+def main():
+        fizz_buzz(10)
+
+if __name__ == '__main__':
+        main()
+
+>> vim fizzbuzz.py
+
+command mode:
+
+/ <- search words
+n <- next match
+gg <- go back to top
+
+
+----------------- 
+>> vim ~/.vimrc
+-----------------
+>> python
+
+>> exit()
+
+
+
+
+
+
+
+
